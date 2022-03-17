@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${titulo}"></title>
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">-->
+</head>
+<body>
+    <section th:replace="layouts/tiempo :: interceptor"></section>
+    <h3 th:text="${titulo}"></h3>
+    <div class="container">
+    <form th:action="@{/form}" method="post" th:object="${usuario}">
+        <div class="form-group">
+            <div>
+                <input type="hidden" id="valorSecreto" th:field="*{valorSecreto}" />
+            </div>
+        </div>
+        <div>
+            <label  class="col-form-label col-sm-2" for="habilitar">Habilitar</label>
+            <div class="row col-sm-4">
+                <input class="form-control col-sm-1" type="checkbox" id="habilitar" th:field="*{habilitar}" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label col-sm-2">Género</label>
+            <div class="row col-sm-4" th:each="gen: ${genero}">
+                <input class="form-control col-sm-2" type="radio" th:field="*{genero}" th:value="${gen}"/>
+                <label class="col-form-label col-sm-2" th:for="${#ids.prev('genero')}" th:text="${gen}"></label>
+            </div>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}"></div>
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label col-sm-2" for="codigo">Código</label>
+            <div class="row col-sm-4">
+                <input class="form-control col-sm-2" type="text" id="codigo" th:field="*{codigo}" />
+            </div>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></div>
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label col-sm-2" for="nombre">Nombres</label>
+            <div class="row col-sm-4">
+                <input class="form-control col-sm-2" type="text" id="nombre" th:field="*{nombre}" />
+            </div>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label col-sm-2" for="apellido">Apellidos</label>
+            <div class="row col-sm-4">
+                <input class="form-control col-sm-2" type="text" id="apellido" th:field="*{apellido}" />
+            </div>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></div>
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label col-sm-2" for="username">Username</label>
+            <div class="row col-sm-4">
+                <input class="form-control" type="text" id="username" th:field="*{username}"/>
+            </div>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label col-sm-2" for="password">Password</label>
+            <div class="row col-sm-4">
+                <input class="form-control" type="password" id="password" th:field="*{password}"/>
+            </div>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label col-sm-2" for="email">Email</label>
+            <div class="row col-sm-4">
+                <input class="form-control" type="text" id="email" th:field="*{email}"/>
+            </div>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label col-sm-2" for="cuenta">Cuenta</label>
+            <div class="row col-sm-4">
+                <input class="form-control" type="number" id="cuenta" th:field="*{cuenta}"/>
+            </div>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('cuenta')}" th:errors="*{cuenta}"></div>
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label col-sm-2" for="fecha">Fecha Nacimiento</label>
+            <div class="row col-sm-4">
+                <input type="date" id="fecha" th:field="*{fechaNacimiento}" placeholder="2022/01/24"/>
+            </div>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('fechaNacimiento')}" th:errors="*{fechaNacimiento}"></div>
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label col-sm-2" for="pais">Pais</label>
+            <div class="row col-sm-4">
+                <select class="form-control" id="pais" th:field="*{pais}">
+                    <option value="">Selecciona un país</option>
+                    <option th:each="pais : ${listaPaises}" th:text="${pais.nombre}" th:value="${pais.id}"></option>
+                </select>
+            </div>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('pais')}" th:errors="*{pais}"></div>
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label col-sm-2">Roles</label>
+            <div class="row col-sm-4" th:each="role: ${roles}">
+                <input class="form-control" type="checkbox" th:field="*{roles}" th:value="${role.id}" th:checked="${#lists.contains(usuario.roles, role)}"/>
+                <label class="col-form-label col-sm-2" th:text="${role.nombre}" th:for="${#ids.prev('roles')}"></label>
+            </div>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}"></div>
+        </div>
+        <div class="form-group row">
+            <div>
+                <input class="btn btn-success" type="submit" value="Enviar"/>
+            </div>
+        </div>
+    </form>
+    </div>
+</body>
+</html>
